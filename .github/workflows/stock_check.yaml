@@ -29,4 +29,4 @@ jobs:
       env:
         # We store the Webhook URL as a "Secret" for security
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-      run: python main.py
+      run: python test_discord.py
