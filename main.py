@@ -44,14 +44,17 @@ def check_logic():
             if day_drop <= -5:
                 send_alert(ticker, day_drop, "Intraday 5% Drop", get_news(ticker))
 
-        # Scenario 2: Friday After-Market > 10%
-        # (Note: yfinance 'Close' on Friday is the market close price)
+        # Scenario 2: Friday Weekly Drop > 10% (Monday Open to Friday Close)
         if is_friday:
-            # We compare Friday's Close to Friday's Post-Market (if available) 
-            # or Friday's High to Friday's Close.
-            friday_drop = ((hist_1d['Close'].iloc[0] - hist_1d['Open'].iloc[0]) / hist_1d['Open'].iloc[0]) * 100
-            if friday_drop <= -10:
-                send_alert(ticker, friday_drop, "Friday Crash", get_news(ticker))
+            # We fetch 5 days of data to get the Monday of the current week
+            hist_5d = stock.history(period="5d")
+            if len(hist_5d) >= 5:
+                monday_open = hist_5d['Open'].iloc[0]
+                friday_close = hist_5d['Close'].iloc[-1]
+                weekly_drop = ((friday_close - monday_open) / monday_open) * 100
+                
+                if weekly_drop <= -10:
+                    send_alert(ticker, weekly_drop, "Weekly 10% Drop (Mon-Fri)",
 
         # Scenario 3: Monthly Drop > 15%
         if is_month_end:
