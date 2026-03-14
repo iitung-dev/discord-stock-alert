@@ -54,7 +54,7 @@ def check_logic():
                 weekly_drop = ((friday_close - monday_open) / monday_open) * 100
                 
                 if weekly_drop <= -10:
-                    send_alert(ticker, weekly_drop, "Weekly 10% Drop (Mon-Fri)",
+                    send_alert(ticker, weekly_drop, "Weekly 10% Drop (Mon-Fri)"),
 
         # Scenario 3: Monthly Drop > 15%
         if is_month_end:
